@@ -1,0 +1,60 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: najibmuhammadi
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: messageaws
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: MessageAws
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  deploymentMethod: direct
+  iam:
+    role: arn:aws:iam::842675996493:role/LambdaDynamoDbRole
+
+functions:
+  GetMessage:
+    handler: functions/GetMessage/index.handler
+    events:
+      - httpApi:
+          path: /api/message
+          method: get
+  PostMessage:
+    handler: functions/PostMessage/index.handler
+    events:
+      - httpApi:
+          path: /api/message
+          method: post
+  UpdateMessage:
+    handler: functions/UpdateMessage/index.handler
+    events:
+      - httpApi:
+          path: /api/message/{id}
+          method: put
+  DeleteMessage:
+    handler: functions/DeleteMessage/index.handler
+    events:
+      - httpApi:
+          path: /api/message/{id}
+          method: delete
+  GetByUsername:
+    handler: functions/GetByUsername/index.handler
+    events:
+      - httpApi:
+          path: /api/message/{username}
+          method: get
+
+resources:
+  Resources:
+    MessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "messages-db"
+        AttributeDefinitions:
+          - AttributeName: "MessageID"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "MessageID"
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
