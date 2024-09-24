@@ -11,7 +11,7 @@ provider:
   region: eu-north-1
   deploymentMethod: direct
   iam:
-    role: arn:aws:iam::842675996493:role/LambdaDynamoDbRole
+    role: arn:aws:iam::xxxxxxxxxxxx:role/service-role/MessageAws-role-xxxxxxxxxxxx
 
 functions:
   GetMessage:
